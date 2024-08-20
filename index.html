@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planejamento de Eventos</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #9a9e9a;
+            color: #f4f4f4;
+            padding: 10px 0;
+            text-align: center;
+        }
+        main {
+            padding: 20px;
+        }
+        h2 {
+            color: #9a9e9a;
+            padding: 10px 0;
+            text-align: center;
+        }
+        .list-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            padding-right: 20px;
+        }
+        .list {
+            background-color: #bdbdbd;
+            border: 1px solid #9a9e9a;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px;
+            width: 25%;
+            min-width: 250px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .list h3 {
+            margin-top: 0;
+            color: #f4f4f4;
+            padding: 10px 0;
+            text-align: center;
+        }
+        input, textarea {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #9a9e9a;
+            border-radius: 5px;
+        }
+        input[type="file"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #9a9e9a;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        button {
+            padding: 10px;
+            background-color: white;
+            color: #9a9e9a;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #9a9e9a;
+            color: #f4f4f4;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li {
+            background-color: #f4f4f4;
+            border: 1px solid #9a9e9a;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .item-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: none;
+        }
+        .item-description {
+            display: none;
+            font-family: 'Arial', sans-serif;
+        }
+        .item-header {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            justify-content: space-between;
+        }
+        .toggle-button {
+            cursor: pointer;
+            color: #9a9e9a;
+            font-size: 20px;
+            transition: transform 0.3s, color 0.3s; 
+        }
+        .toggle-button.down {
+            transform: rotate(0deg); 
+        }
+        .toggle-button.up {
+            transform: rotate(180deg); 
+        }
+        h4 {
+            font-family: 'Arial', sans-serif;
+            margin: 0; 
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Planejamento de Eventos</h1>
+    </header>
+    
+    <main>
+        <section>
+            <div class="list-container">
+                <div class="list">
+                    <h3>Pratos Principais</h3>
+                    <input type="text" id="main-title" placeholder="Título">
+                    <textarea name="main-description" id="main-description" placeholder="Descrição"></textarea>
+                    <input type="file" id="main-image" accept="image/*">
+                    <button onclick="addItem('main-title', 'main-description', 'main-image', 'main-list')">Adicionar</button>
+                    <ul id="main-list"></ul>
+                </div>
+
+                <div class="list">
+                    <h3>Acompanhamentos</h3>
+                    <input type="text" id="side-title" placeholder="Título">
+                    <textarea name="side-description" id="side-description" placeholder="Descrição"></textarea>
+                    <input type="file" id="side-image" accept="image/*">
+                    <button onclick="addItem('side-title', 'side-description', 'side-image', 'side-list')">Adicionar</button>
+                    <ul id="side-list"></ul>
+                </div>
+
+                <div class="list">
+                    <h3>Sobremesas</h3>
+                    <input type="text" id="dessert-title" placeholder="Título">
+                    <textarea name="dessert-description" id="dessert-description" placeholder="Descrição"></textarea>
+                    <input type="file" id="dessert-image" accept="image/*">
+                    <button onclick="addItem('dessert-title', 'dessert-description', 'dessert-image', 'dessert-list')">Adicionar</button>
+                    <ul id="dessert-list"></ul>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script>
+        function addItem(titleId, descriptionId, imageId, listId){
+            const titleElement = document.getElementById(titleId);
+            const descriptionElement = document.getElementById(descriptionId);
+            const imageElement = document.getElementById(imageId);
+            const title = titleElement.value;
+            const description = descriptionElement.value;
+            const imageFile = imageElement.files[0];
+
+            if (title.trim() !== ''){
+                const ulElement = document.getElementById(listId);
+                const liElement = document.createElement('li');
+                
+                const headerDiv = document.createElement('div');
+                headerDiv.classList.add('item-header');
+
+                const titleH4Element = document.createElement('h4');
+                titleH4Element.textContent = title;
+
+                const toggleButton = document.createElement('span');
+                toggleButton.textContent = 'v'; 
+                toggleButton.classList.add('toggle-button', 'down');
+                toggleButton.onclick = function() {
+                    const desc = liElement.querySelector('.item-description');
+                    const img = liElement.querySelector('.item-image');
+                    desc.style.display = desc.style.display === 'none' ? 'block' : 'none';
+                    if (img) {
+                        img.style.display = img.style.display === 'none' ? 'block' : 'none';
+                    }
+                    
+                    if (toggleButton.textContent === 'v') {
+                        toggleButton.textContent = '^';
+                        toggleButton.classList.remove('down');
+                        toggleButton.classList.add('up');
+                    } else {
+                        toggleButton.textContent = 'v';
+                        toggleButton.classList.remove('up');
+                        toggleButton.classList.add('down');
+                    }
+                };
+
+                headerDiv.appendChild(toggleButton);
+                headerDiv.appendChild(titleH4Element);
+                liElement.appendChild(headerDiv);
+                
+                if (description.trim() !== '') {
+                    const descriptionPElement = document.createElement('p');
+                    descriptionPElement.textContent = description;
+                    descriptionPElement.classList.add('item-description');
+                    liElement.appendChild(descriptionPElement);
+                }
+                if (imageFile) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const imgElement = document.createElement('img');
+                        imgElement.src = event.target.result;
+                        imgElement.classList.add('item-image');
+                        liElement.appendChild(imgElement);
+                    };
+                    reader.readAsDataURL(imageFile);
+                }
+                ulElement.appendChild(liElement);
+
+                titleElement.value = '';
+                descriptionElement.value = '';
+                imageElement.value = '';
+            }
+        }
+    </script>
+</body>
+</html>
